@@ -8,13 +8,16 @@ import { showList } from '../../api/list'
 const List = (props) => {
     // deconstruction of the props
     const { user, msgAlert } = props
-    const [list, setList] = useState(null)
+    const [list, setList] = useState(1)
 
     // when user gets in here, there should be a useEffect that check if the user has a list, if the user has a list, the useEffect should make an api call to retrieve it, if not then create one
-
+    // lists should be able to be retrieve by anyone, but when you sign in, you should only be allow to see yours
     useEffect(() => {
         showList(user)
-          .then(res => setList(res.data.list))
+          .then(res => {
+            const myList = res.data.lists.find(x => x.owner === user._id)
+            setList(myList)
+          })
           .then(() => msgAlert({
             heading: 'Index List Successfully',
             message: 'Succesfully retrieve List',
@@ -30,10 +33,17 @@ const List = (props) => {
       }, [])
 
     let listJsx
-    if (!list) {
+    if (list === 1) {
         listJsx = 'loading...'
+    } else if (!list) {
+      // Button to create list
+        listJsx = 'Create List'
     } else {
-        listJsx = list
+      listJsx = (
+              <div key={list._id}>
+                <p style={{ fontSize: '1.4rem' }} >{list.title}</p>
+              </div>
+        )
     }
 
   return (

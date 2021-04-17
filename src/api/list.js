@@ -12,12 +12,9 @@ export const createList = (list, user) => {
   })
 }
 
-export const showList = (user) => {
+export const showList = () => {
   return axios({
     url: apiUrl + '/lists',
-    method: 'GET',
-    headers: {
-      'Authorization': `Token token=${user.token}`
-    }
+    method: 'GET'
   })
 }
