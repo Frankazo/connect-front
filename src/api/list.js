@@ -1,14 +1,19 @@
 import apiUrl from '../apiConfig'
 import axios from 'axios'
 
-export const createList = (list, user) => {
+export const createList = (user) => {
   return axios({
     url: apiUrl + '/lists',
     method: 'POST',
     headers: {
       'Authorization': `Token token=${user.token}`
     },
-    data: { list }
+    data: {
+      list: {
+        title: 'My List',
+        customURL: `www.websitename.com/${user.token}`
+      }
+    }
   })
 }
 
